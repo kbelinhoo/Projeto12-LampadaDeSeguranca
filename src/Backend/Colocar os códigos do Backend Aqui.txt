@@ -9,16 +9,16 @@ RTC_DS3231 rtc; //IDENTIFICAÇÃO DO OBJETO DO TIPO RTC_DS3231
 DateTime now; //VERIFICA A DATA E HORA ATUAL DO COMPUTADOR LOCAL
 
 int horaAtual, minutoAtual; //CRIAÇÃO DAS VARIAVEIS PARA IDENTIFICAR AS HORAS
-int horaLigar, horaDesligar; //CRIAÇÃO DAS VARIAVEIS QUE DETERMINARÃO O FUNCIONAMENTO DO DISPOSITIVO
-int condicao; //CRIAÇÃO DA VARIAVEL PARA IDENTIFICAR SE O DISPOSITIVO ESTÁ LIGADO OU DESLIGADO
+int horaLigar = 18, horaDesligar = 6; //CRIAÇÃO DAS VARIAVEIS QUE DETERMINARÃO O FUNCIONAMENTO DO DISPOSITIVO
+int condicao = 0; //CRIAÇÃO DA VARIAVEL PARA IDENTIFICAR SE O DISPOSITIVO ESTÁ LIGADO OU DESLIGADO
 
 #define LDR A0 //DEFINE A0 COMO SAIDA DE INFORMAÇÕES DO SENSOR DE LUMINOSIDADE
 #define lampada D5 //DEFINE A5 COMO A PORTA DA LÃMPADA
 
 int limiteSensibilidade = 800; //DEFINE A SENSIBILIDADE ACEITÁVEL PARA SER DETERMINADA COMO LIGADA, ENTRE 0 E 1024
 
-const char* ssid = "Luciana-2.4GHZ"; //USUÁRIO DA REDE
-const char* password = "Aurora5834"; //SENHA DA REDE
+const char* ssid = "********"; //USUÁRIO DA REDE
+const char* password = "********"; //SENHA DA REDE
 
 ESP8266WebServer server(80); //DEFINE A PORTA QUE O WEB SERVER IRÁ RESPONDER
 
@@ -30,12 +30,12 @@ void handleRoot() { //RESPOSTA EXECUTADA QUANDO O HTML SOLICITAR INFORMAÇÕES
     String texto1 = "Quantidade de luminosidade interna = "; //TEXTO PARA SER INSERIDO NA PÁGINA HTML
     
     String ligar; //VARIÁVEL QUE INFORMA O COMANDO ATUAL DA LÂMPADA, LIGADO OU DESLIGADO
-    if (condicao == 0 && horaAtual >= horaLigar || horaAtual <= horaDesligar)
+    if (horaAtual >= horaLigar || horaAtual <= horaDesligar)
     {
       ligar = "; Foi enviado sinal para ligar; ";
     }
   
-    if (condicao == 1 && horaAtual >= horaDesligar)
+    if (horaAtual >= horaDesligar)
     {
       ligar = "; Foi enviado sinal para desligar; ";
     }
@@ -127,10 +127,7 @@ void setup(void){
   }
   now = rtc.now(); //CHAMADA DE FUNÇÃO
   
-  horaLigar = 18; //DEFINE O HORÁRIO EM QUE A LÂMPADA SERÁ LIGADA
-  horaDesligar = 6; //DEFINE O HORÁRIO EM QUE A LÂMPADA SERÁ DESLIGADA
-  condicao = 0; //CONDIÇÃO DA LÂMPADA POR PADRÃO
-  //REMOVA O COMENTÁRIO DE UMA DAS LINHAS ABAIXO PARA INSERIR AS INFORMAÇÕES ATUALIZADAS EM SEU RTC
+  //REMOVA O COMENTÁRIO DA LINHA ABAIXO PARA INSERIR AS INFORMAÇÕES ATUALIZADAS EM SEU RTC
   //rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //CAPTURA A DATA E HORA EM QUE O SKETCH É COMPILADO 
 }
 
